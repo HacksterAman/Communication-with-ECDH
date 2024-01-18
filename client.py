@@ -1,4 +1,4 @@
-from temp import *
+from ECDH import *
 import socket
 
 # Main function to run the client
@@ -37,13 +37,15 @@ def main():
         while True:
             # Encrypt and send a message to the server
             message = input("Client: ")
-            encrypted_message = encrypt_message(shared_secret, message.encode())
-            client_socket.sendall(encrypted_message)
+            iv, tag, cipher = encrypt(shared_secret, message.encode())
+            encrypted_response = iv + tag + cipher
+            client_socket.sendall(encrypted_response)
 
             # Receive and decrypt a message from the server
-            encrypted_response = client_socket.recv(1024)
-            decrypted_response = decrypt_message(shared_secret, encrypted_response)
-            print(f"Received from server: {decrypted_response.decode()}")
+            encrypted_message = client_socket.recv(1024)
+            iv, tag, cipher = encrypted_message[:16], encrypted_message[16:32], encrypted_message[32:]
+            decrypted_message = decrypt(shared_secret, iv, tag, cipher)
+            print(f"Received from server: {decrypted_message.decode()}")
 
 # Run the main function if the script is executed directly
 if __name__ == "__main__":

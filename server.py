@@ -1,4 +1,4 @@
-from temp import *
+from ECDH import *
 import socket
 
 # Main function to run the server
@@ -34,12 +34,14 @@ def main():
             while True:
                 # Receive and decrypt a message from the client
                 encrypted_message = conn.recv(1024)
-                decrypted_message = decrypt_message(shared_secret, encrypted_message)
+                iv, tag, cipher = encrypted_message[:16], encrypted_message[16:32], encrypted_message[32:]
+                decrypted_message = decrypt(shared_secret, iv, tag, cipher)
                 print(f"Received from client: {decrypted_message.decode()}")
 
                 # Encrypt and send a message to the client
                 message = input("Server: ")
-                encrypted_response = encrypt_message(shared_secret, message.encode())
+                iv, tag, cipher = encrypt(shared_secret, message.encode())
+                encrypted_response = iv + tag + cipher
                 conn.sendall(encrypted_response)
 
 # Run the main function if the script is executed directly

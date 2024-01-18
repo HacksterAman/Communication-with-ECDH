@@ -38,8 +38,8 @@ def encrypt(key, plaintext):
     return iv, tag, ciphertext
 
 # Function to decrypt a message using AES-256-GCM
-def decrypt(key, iv, tag, cipher):
+def decrypt(key, iv, tag, ciphertext):
     cipher = Cipher(algorithms.AES(key), modes.GCM(iv, tag), backend=default_backend())
     decryptor = cipher.decryptor()
-    plaintext = decryptor.update(cipher) + decryptor.finalize()
+    plaintext = decryptor.update(ciphertext) + decryptor.finalize()
     return plaintext
