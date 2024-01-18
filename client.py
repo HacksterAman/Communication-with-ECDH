@@ -1,4 +1,4 @@
-from ECDH import *
+from lib import *
 import socket
 
 # Main function to run the client
