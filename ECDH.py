@@ -6,9 +6,7 @@ import os
 
 # Function to generate a pair of ephemeral private and public keys using ECC
 def generate_ephemeral_key():
-    private_key = ec.generate_private_key(
-        ec.SECP521R1(), backend=default_backend()
-    )
+    private_key = ec.generate_private_key(ec.SECP521R1(), backend=default_backend())
     public_key = private_key.public_key()
     return private_key, public_key
 
@@ -35,9 +33,9 @@ def encrypt(key, plaintext):
     iv = os.urandom(16)  # Generate a random IV (Initialization Vector)
     cipher = Cipher(algorithms.AES(key), modes.GCM(iv), backend=default_backend())
     encryptor = cipher.encryptor()
-    cipher = encryptor.update(plaintext) + encryptor.finalize()
+    ciphertext = encryptor.update(plaintext) + encryptor.finalize()
     tag = encryptor.tag
-    return iv, tag, cipher
+    return iv, tag, ciphertext
 
 # Function to decrypt a message using AES-256-GCM
 def decrypt(key, iv, tag, cipher):

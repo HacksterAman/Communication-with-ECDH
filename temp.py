@@ -2,14 +2,11 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import ec, padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-import socket
 import os
 
 # Function to generate a pair of ephemeral private and public keys using ECC
 def generate_ephemeral_key():
-    private_key = ec.generate_private_key(
-        ec.SECP521R1(), backend=default_backend()
-    )
+    private_key = ec.generate_private_key(ec.SECP521R1(), backend=default_backend())
     public_key = private_key.public_key()
     return private_key, public_key
 

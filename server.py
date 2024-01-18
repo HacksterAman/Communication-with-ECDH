@@ -1,4 +1,4 @@
-from temp import *
+from ECDH import *
 import socket
 
 # Main function to run the server
@@ -39,6 +39,7 @@ def main():
 
                 # Encrypt and send a message to the client
                 message = input("Server: ")
+                iv, tag, ciphertext
                 encrypted_response = encrypt_message(shared_secret, message.encode())
                 conn.sendall(encrypted_response)
 
