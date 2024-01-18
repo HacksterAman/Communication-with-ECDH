@@ -54,8 +54,24 @@ def decrypt_message(key, ciphertext):
 def main():
     # Create a socket for the client
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-        # Connect to the server
-        client_socket.connect(("localhost", 12345))
+        
+        # Set a timeout for the connection attempt (5 seconds)
+        client_socket.settimeout(5)
+
+        try:
+            # Attempt to connect to the server
+            client_socket.connect(("localhost", 12345))
+        except socket.timeout:
+            print("Connection attempt timed out.")
+            return
+        except ConnectionRefusedError:
+            print("Connection refused. The target machine is not accepting connections.")
+            return
+        except Exception as e:
+            print(f"Connection failed: {e}")
+            return
+
+        print("Connected to the server.")
 
         # Generate ephemeral client keys
         client_ephemeral_private_key, client_ephemeral_public_key = generate_ephemeral_key()
